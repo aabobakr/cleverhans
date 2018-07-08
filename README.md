@@ -1,4 +1,4 @@
-# CleverHans (v1.0.0)
+# CleverHans (latest release: v2.1.0)
 
 <img src="https://github.com/tensorflow/cleverhans/blob/master/assets/logo.png?raw=true" alt="cleverhans logo">
 
@@ -39,54 +39,64 @@ Once dependencies have been taken care of, you can install CleverHans using
 
 #### `pip` installation
 
-If you are installing CleverHans using `pip`, run the following command:
+If you are installing CleverHans using `pip`, run the following command
+after installing TensorFlow:
 
 ```
-pip install -e git+http://github.com/tensorflow/cleverhans.git#egg=cleverhans
+pip install cleverhans
+```
+
+This will install the last version uploaded to 
+[Pypi](https://pypi.org/project/cleverhans). 
+If you'd instead like to install the bleeding edge version, use: 
+
+```
+pip install -e git+https://github.com/tensorflow/cleverhans.git#egg=cleverhans
 ```
 
 #### Manual installation
 
-If you are installing CleverHans manually, you need to install TensorFlow
-first. Then, run the following command to clone the CleverHans repository
+If you are installing CleverHans manually, install TensorFlow first. 
+Then, run the following command to clone the CleverHans repository
 into a folder of your choice:
 
 ```
 git clone https://github.com/tensorflow/cleverhans
 ```
 
-On UNIX machines, it is recommended to add your clone of this repository to the
-`PYTHONPATH` variable so as to be able to import `cleverhans` from any folder.
+You can then install the local package in "editable" mode in order to add it to
+your `PYTHONPATH`
 
 ```
-export PYTHONPATH="/path/to/cleverhans":$PYTHONPATH
+pip install -e ./cleverhans
 ```
-
-You may want to make that change permanent through your shell's profile.
 
 ### Currently supported setups
 
 Although CleverHans is likely to work on many other machine configurations, we
-currently [test it](https://travis-ci.org/tensorflow/cleverhans) with Python
-{2.7, 3.5} and TensorFlow {1.0, 1.1} on Ubuntu 14.04.5 LTS (Trusty Tahr).
+currently [test it](https://travis-ci.org/tensorflow/cleverhans) it with Python
+{2.7, 3.5} and TensorFlow {1.4, 1.8} on Ubuntu 14.04.5 LTS (Trusty Tahr).
+Support for TensorFlow 1.3 and earlier is deprecated. After 2018-11-1 we will
+not fix bugs reported for these versions and we will eliminate wrapper code
+needed for backwards compatibility with these versions.
 
 ## Tutorials
 
 To help you get started with the functionalities provided by this library, the
-`tutorials/' folder comes with the following tutorials:
-* **MNIST with FGSM** ([code](tutorials/mnist_tutorial_tf.py)): this
+`cleverhans_tutorials/' folder comes with the following tutorials:
+* **MNIST with FGSM** ([code](cleverhans_tutorials/mnist_tutorial_tf.py)): this
 tutorial covers how to train a MNIST model using TensorFlow,
 craft adversarial examples using the [fast gradient sign method](https://arxiv.org/abs/1412.6572),
 and make the model more robust to adversarial examples using adversarial training.
-* **MNIST with FGSM using Keras** ([code](tutorials/mnist_tutorial_keras_tf.py), [tutorial](tutorials/mnist_tutorial_keras_tf.md)): this
+* **MNIST with FGSM using Keras** ([code](cleverhans_tutorials/mnist_tutorial_keras_tf.py)): this
 tutorial covers how to define a MNIST model with Keras and train it using TensorFlow,
 craft adversarial examples using the [fast gradient sign method](https://arxiv.org/abs/1412.6572),
 and make the model more robust to adversarial
 examples using adversarial training.
-* **MNIST with JSMA** ([code](tutorials/mnist_tutorial_jsma.py), [tutorial](tutorials/mnist_tutorial_jsma.md)): this second
+* **MNIST with JSMA** ([code](cleverhans_tutorials/mnist_tutorial_jsma.py)): this second
 tutorial covers how to define a MNIST model with Keras and train it using TensorFlow and
 craft adversarial examples using the [Jacobian-based saliency map approach](https://arxiv.org/abs/1511.07528).
-* **MNIST using a black-box attack** ([code](tutorials/mnist_blackbox.py)):
+* **MNIST using a black-box attack** ([code](cleverhans_tutorials/mnist_blackbox.py)):
 this tutorial implements the black-box
 attack described in this [paper](https://arxiv.org/abs/1602.02697).
 The adversary train a substitute model: a copy that imitates the black-box
@@ -97,7 +107,8 @@ black-box model as well.
 
 Some models used in the tutorials are defined using [Keras](https://keras.io),
 which should be installed before running these tutorials.
-Installation instructions for Keras can be found [here](https://keras.io/#installation)
+Installation instructions for Keras can be found
+[here](https://keras.io/#installation).
 Note that you should configure Keras to use the TensorFlow backend. You
 can find instructions for
 setting the Keras backend [on this page](https://keras.io/backend/).
@@ -105,7 +116,12 @@ setting the Keras backend [on this page](https://keras.io/backend/).
 ## Examples
 
 The `examples/` folder contains additional scripts to showcase different uses
-of the CleverHans library.
+of the CleverHans library or get you started competing in different adversarial
+example contests.
+
+## List of attacks
+
+You can find a full list attacks along with their function signatures at [cleverhans.readthedocs.io](http://cleverhans.readthedocs.io/)
 
 ## Reporting benchmarks
 
@@ -116,8 +132,8 @@ When reporting benchmarks, please:
 * Report any configuration variables used to determine the behavior of the attack.
 
 For example, you might report "We benchmarked the robustness of our method to
-adversarial attack using v1.0.0 of CleverHans. On a test set modified by the
-`fgsm` with `eps` of 0.3, we obtained a test set accuracy of 71.3%."
+adversarial attack using v2.1.0 of CleverHans. On a test set modified by the
+`FastGradientMethod` with a max-norm `eps` of 0.3, we obtained a test set accuracy of 71.3%."
 
 ## Contributing
 
@@ -127,6 +143,9 @@ on the mailing list for CleverHans development: [cleverhans-dev@googlegroups.com
 * When making code contributions to CleverHans, you follow the
 `PEP8` coding style in your pull requests.
 * When making your first pull request, you [sign the Google CLA](https://cla.developers.google.com/clas)
+* We do not accept pull requests that add git submodules because of [the
+  problems that arise when maintaining git
+  submodules](https://medium.com/@porteneuve/mastering-git-submodules-34c65e940407)
 
 Bug fixes can be initiated through Github pull requests.
 
@@ -136,16 +155,19 @@ If you use CleverHans for academic research, you are highly encouraged
 (though not required) to cite the following [paper](https://arxiv.org/abs/1610.00768):
 
 ```
-@article{papernot2016cleverhans,
-  title={cleverhans v1.0.0: an adversarial machine learning library},
-  author={Papernot, Nicolas and Goodfellow, Ian and Sheatsley, Ryan and Feinman, Reuben and McDaniel, Patrick},
+@article{papernot2018cleverhans,
+  title={Technical Report on the CleverHans v2.1.0 Adversarial Examples Library},
+  author={Nicolas Papernot and Fartash Faghri and Nicholas Carlini and
+  Ian Goodfellow and Reuben Feinman and Alexey Kurakin and Cihang Xie and
+  Yash Sharma and Tom Brown and Aurko Roy and Alexander Matyasko and
+  Vahid Behzadan and Karen Hambardzumyan and Zhishuai Zhang and
+  Yi-Lin Juang and Zhi Li and Ryan Sheatsley and Abhibhav Garg and 
+  Jonathan Uesato and Willi Gierke and Yinpeng Dong and David Berthelot and
+  Paul Hendricks and Jonas Rauber and Rujun Long},
   journal={arXiv preprint arXiv:1610.00768},
-  year={2016}
+  year={2018}
 }
 ```
-
-A new version of the technical report will be uploaded for each major
-revision. GitHub contributors will be added to the author list.
 
 ## About the name
 
@@ -169,12 +191,33 @@ This library is managed and maintained by Ian Goodfellow (Google Brain),
 Nicolas Papernot (Pennsylvania State University), and
 Ryan Sheatsley (Pennsylvania State University).
 
-The following authors contributed (ordered according to the GitHub contributors page):
-* Nicolas Papernot (Pennsylvania State University)
-* Ian Goodfellow (OpenAI)
-* Ryan Sheatsley (Pennsylvania State University)
+The following authors contributed 100 lines or more (ordered according to the GitHub contributors page):
+* Nicolas Papernot (Pennsylvania State University, Google Brain intern)
+* Fartash Faghri (University of Toronto, Google Brain intern)
+* Nicholas Carlini (UC Berkeley)
+* Ian Goodfellow (Google Brain)
 * Reuben Feinman (Symantec)
+* Alexey Kurakin (Google Brain)
+* Cihang Xie (Johns Hopkins)
+* Yash Sharma (The Cooper Union)
+* Tom Brown (Google Brain)
+* Aurko Roy (Google Brain)
+* Alexander Matyasko (Nanyang Technological University)
+* Vahid Behzadan (Kansas State)
+* Karen Hambardzumyan (YerevaNN)
+* Zhishuai Zhang (Johns Hopkins)
+* Yi-Lin Juang (NTUEE)
+* Zhi Li (University of Toronto)
+* Ryan Sheatsley (Pennsylvania State University)
+* Abhibhav Garg (IIT Delhi)
+* Jonathan Uesato (MIT)
+* Willi Gierke (Hasso Plattner Institute)
+* Yinpeng Dong (Tsinghua University)
+* David Berthelot (Google Brain)
+* Paul Hendricks (NVIDIA)
+* Jonas Rauber (IMPRS)
+* Rujun Long (0101.AI)
 
 ## Copyright
 
-Copyright 2017 - Google Inc., OpenAI and Pennsylvania State University.
+Copyright 2018 - Google Inc., OpenAI and Pennsylvania State University.
